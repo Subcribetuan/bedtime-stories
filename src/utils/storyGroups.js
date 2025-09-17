@@ -147,26 +147,26 @@ export const THEME_CATEGORIES = {
 
 export const CHARACTER_GROUPS = {
   'benjamin': {
-    name: 'Benjamin Stories',
-    description: 'Perfect for toddlers (2-3 years)',
+    name: 'Ages 2-3 years',
+    description: 'Gentle adventures for toddlers',
     icon: '🧸',
     ageRange: '2-3 years'
   },
   'christopher': {
-    name: 'Christopher Stories',
-    description: 'Great for preschoolers (4+ years)',
+    name: 'Ages 4-5 years',
+    description: 'Curious preschool explorations',
     icon: '🚀',
-    ageRange: '4+ years'
+    ageRange: '4-5 years'
   },
   'family': {
-    name: 'Family Stories',
-    description: 'Both boys together',
+    name: 'Ages 2-5 years',
+    description: 'Perfect when siblings listen together',
     icon: '👨‍👩‍👧‍👦',
-    ageRange: 'All ages'
+    ageRange: '2-5 years'
   },
   'general': {
-    name: 'General Stories',
-    description: 'Universal themes for any age',
+    name: 'Flexible Ages',
+    description: 'Universal themes for any listener',
     icon: '⭐',
     ageRange: 'Any age'
   }
@@ -198,14 +198,25 @@ export const READING_TIME_GROUPS = {
 export const getStoriesByCharacter = (stories, character) => {
   switch (character) {
     case 'benjamin':
-      return stories.filter(s => s.ageLevel && s.ageLevel.includes('benjamin') && !s.ageLevel.includes('christopher'));
+      return stories.filter(s => {
+        const levels = s.ageLevel || [];
+        return levels.includes('2-3 years');
+      });
     case 'christopher':
-      return stories.filter(s => s.ageLevel && s.ageLevel.includes('christopher') && !s.ageLevel.includes('benjamin'));
+      return stories.filter(s => {
+        const levels = s.ageLevel || [];
+        return levels.includes('4-5 years');
+      });
     case 'family':
-      return stories.filter(s => s.ageLevel && s.ageLevel.includes('benjamin') && s.ageLevel.includes('christopher'));
+      return stories.filter(s => {
+        const levels = s.ageLevel || [];
+        return levels.includes('2-5 years') || levels.includes('2-4 years');
+      });
     case 'general':
-      return stories.filter(s => !s.ageLevel || s.ageLevel.length === 0 ||
-        (!s.ageLevel.includes('benjamin') && !s.ageLevel.includes('christopher')));
+      return stories.filter(s => {
+        const levels = s.ageLevel || [];
+        return levels.length === 0 || (!levels.includes('2-3 years') && !levels.includes('4-5 years') && !levels.includes('2-5 years') && !levels.includes('2-4 years'));
+      });
     default:
       return stories;
   }
@@ -282,3 +293,4 @@ export const getStoryStats = (stories) => {
     byReadingTime: readingTimeCounts
   };
 };
+
